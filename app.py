@@ -344,6 +344,10 @@ def upload():
         # result = str(names[np.argmax(preds)])              
         # return result
         return prediccion_hecha
+   
+@app.route("/")
+def index():
+    return "funcionaa"
 
 if __name__ == "__main__":
     app.run(debug=True)
