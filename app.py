@@ -233,6 +233,19 @@ def createLocalizacion():
     return jsonify(str(id.inserted_id))  # muestra el id de un usuario
 
 
+@app.route('/savePredict', methods=['POST'])
+def create():
+    print(request.json)
+
+    id = db2.insert_one({
+        'nombre_planta': request.json['nombre_planta'],
+        'imagen': request.json['imagen'],
+        'latitud': request.json['latitud'],
+        'longitud': request.json['longitud']
+    })
+
+    return jsonify('ok')
+
 # Vamos a tener una ruta para obtener usuarios
 @app.route('/Localizacion', methods=['GET'])
 def getLocalizacion():
@@ -344,12 +357,13 @@ def upload():
         # result = str(names[np.argmax(preds)])              
         # return result
         return prediccion_hecha
-   
+
 @app.route("/")
 def index():
-    return "funcionaa"
+    return "HELLO YOOOS"
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
