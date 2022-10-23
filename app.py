@@ -1,13 +1,7 @@
-from genericpath import exists
-from importlib.metadata import requires
-from importlib.util import resolve_name
-from asyncio.log import logger
-from urllib import response
 from flask import Flask, flash, jsonify, request, Blueprint, Response
 from flask_pymongo import PyMongo, ObjectId
 from flask_pymongo import pymongo
 from flask_cors import CORS
-from pkg_resources import ResolutionError
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_bcrypt import Bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,10 +9,8 @@ from routes.files import routes_files
 from tensorflow.keras import layers
 from tensorflow.keras.models import load_model
 from werkzeug.utils import secure_filename
-import os
 from tensorflow.keras.applications.imagenet_utils import preprocess_input
 import numpy as np
-from PIL import Image
 import base64
 import cv2
 #from firebase_admin import credentials, firestore, initialize_app
@@ -297,6 +289,18 @@ def updateLocalizacion(id):
     return response
 
 
+@app.route('/getinfoplant', methods=['POST'])
+def getIDplant():
+    # print(json.loads(request.data))
+    print(request.json['nombre']) 
+    nombre = request.json['nombre']
+    result = db1.find_one({"nombre_planta": nombre})
+
+    print(result['_id'])
+
+    return jsonify({'result': str(result['_id'])})  # muestra el id de un usuario
+
+
 ##########################################################################################################
 ################# RECONOCIMIENTO PLANTAS ###################
 
@@ -319,7 +323,7 @@ def test():
     
     return "OK"
 
-names = ['arrayan', 'eucalipto', 'hinojo', 'llanten', 'malva', 'manzanilla', 'quechuara', 'ruda_blanca', 'ruda_verde', 'wira_wira', 'desconocido']
+names = ['ARRAYAN', 'EUCALIPTO', 'HINOJO', 'LLANTEN', 'MALVA', 'MANZANILLA', 'QUECHUARA', 'RUDA_BLANCA', 'RUDA_VERDE', 'WIRA_WIRA', 'DESCONOCIDO']
 MODEL_PATH = './models/ptangente.h5'
 model = load_model(MODEL_PATH)
 
@@ -362,8 +366,12 @@ def upload():
 def index():
     return "HELLO YOOOS"
 
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=443)
 
 
 
